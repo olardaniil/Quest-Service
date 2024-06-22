@@ -1,0 +1,30 @@
+version: "3.8"
+
+services:
+
+  backend:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    restart: always
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: any
+    ports:
+      - "8000:8080"
+    environment:
+      - "GIN_MODE=release"
+
+  postgres:
+    image: postgres
+    container_name: quest_service_db
+    restart: always
+    shm_size: 256mb
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: quest_service_db
+    ports:
+      - "5432:5432"
